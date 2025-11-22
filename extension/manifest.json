@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Page Note Saver",
+  "version": "1.0",
+  "description": "Capture selected text and send it to the NoteTaker backend.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "http://localhost:5000/*",
+    "http://127.0.0.1:5000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["widget.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
