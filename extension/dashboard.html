@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NoteTaker Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">✶ NoteTaker</div>
+      <nav class="nav">
+        <a href="#notes" class="nav-link" data-route>Notes</a>
+        <a href="#scrape" class="nav-link" data-route>Scrape</a>
+        <a href="#new" class="nav-link" data-route>New</a>
+      </nav>
+      <div class="api">
+        <input id="apiBase" class="input small" placeholder="http://localhost:5000" />
+        <button id="apiSave" class="btn">Use</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="panel-notes" class="panel is-active">
+        <div class="panel-header">
+          <h2>Recent Notes</h2>
+          <div class="actions">
+            <input id="search" class="input" type="search" placeholder="Search text..." />
+            <button id="refresh" class="btn">Refresh</button>
+          </div>
+        </div>
+        <div id="notes" class="grid"></div>
+        <div id="pager" class="pager"></div>
+      </section>
+
+      <section id="panel-scrape" class="panel">
+        <h2>Scrape & Save</h2>
+        <div class="row">
+          <input id="url" class="input" type="url" placeholder="https://example.com" />
+          <button id="scrape" class="btn primary">Scrape</button>
+        </div>
+        <div id="scrape-status" class="status"></div>
+        <pre id="preview" class="preview"></pre>
+      </section>
+
+      <section id="panel-new" class="panel">
+        <h2>New Note</h2>
+        <textarea id="note-text" class="textarea" rows="10" placeholder="Write something..."></textarea>
+        <div class="row">
+          <input id="note-source" class="input" type="url" placeholder="Source URL (optional)" />
+          <button id="save" class="btn primary">Save</button>
+        </div>
+        <div id="save-status" class="status"></div>
+      </section>
+    </main>
+
+    <template id="note-card">
+      <article class="card">
+        <div class="card-head">
+          <a class="card-link" target="_blank" rel="noopener"></a>
+          <time class="time"></time>
+        </div>
+        <pre class="snippet"></pre>
+        <div class="card-actions">
+          <button class="btn subtle delete">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="dashboard.js" defer></script>
+  </body>
+  </html>

@@ -20,6 +20,15 @@ This workspace wires together a FastAPI backend that stores notes in MongoDB and
    ```
    The service listens on `http://localhost:5000`, exposes `POST /notes`, and a `/health` endpoint for probing connectivity.
 
+### Optional Web UI
+
+- A lightweight UI is available at `http://localhost:5000/ui/` for:
+  - Scraping a URL and saving markdown
+  - Creating a manual note
+  - Browsing, searching and deleting notes
+  
+  The UI is served by FastAPI (StaticFiles). No Node build is required.
+
 ### Verify the backend
 - Use `curl http://localhost:5000/health` and expect `{"status":"ok"}`.
 - Save a test note with `curl -X POST http://localhost:5000/notes -H "Content-Type: application/json" -d '{"text":"Sample"}'`.
@@ -29,6 +38,19 @@ This workspace wires together a FastAPI backend that stores notes in MongoDB and
 1. Build and start the stack with `docker compose up --build`. The compose stack brings up Mongo and the FastAPI backend, exposing ports `5000` for FastAPI and `27017` (host configurable) for Mongo.
 2. Confirm the backend is ready by hitting `http://localhost:5000/health` and checking `docker compose logs backend` for any startup errors.
 3. The chrome extension can continue to send notes to `http://localhost:5000/notes` while the compose stack is running.
+
+### Scrape Website endpoint
+
+- The endpoint `POST /scrape-website` calls a local Firecrawl service.
+- By default, the backend reads `FIRECRAWL_BASE_URL` (set in `docker-compose.yml` to `http://host.docker.internal:8010` for container → host access).
+- Make sure Firecrawl is running on your host at `http://localhost:8010`, or change `FIRECRAWL_BASE_URL` accordingly.
+- When developing outside Docker, the backend will default to `http://localhost:8010` if `FIRECRAWL_BASE_URL` is unset.
+
+### New API endpoints
+
+- `GET /notes?q=&skip=0&limit=20` → Paginated list of notes
+- `GET /notes/{id}` → Fetch a single note
+- `DELETE /notes/{id}` → Remove a note
 
 ### Handling Mongo port conflicts
 
