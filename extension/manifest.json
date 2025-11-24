@@ -6,7 +6,9 @@
   "permissions": ["storage"],
   "host_permissions": [
     "http://localhost:5000/*",
-    "http://127.0.0.1:5000/*"
+    "http://127.0.0.1:5000/*",
+    "http://localhost:8010/*",
+    "http://127.0.0.1:8010/*"
   ],
   "content_scripts": [
     {
@@ -15,6 +17,7 @@
       "run_at": "document_idle"
     }
   ],
+  "action": {"default_popup": "dashboard.html"},
   "web_accessible_resources": [
     {
       "resources": ["widget.css"],
