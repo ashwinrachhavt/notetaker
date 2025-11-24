@@ -11,7 +11,12 @@
       <div class="brand">✶ NoteTaker</div>
       <nav class="nav">
         <a href="#notes" class="nav-link" data-route>Notes</a>
+        <a href="#search" class="nav-link" data-route>Search</a>
+        <a href="#docs" class="nav-link" data-route>Docs</a>
+        <a href="#topics" class="nav-link" data-route>Topics</a>
         <a href="#scrape" class="nav-link" data-route>Scrape</a>
+        <a href="#rollup" class="nav-link" data-route>Rollup</a>
+        <a href="#agents" class="nav-link" data-route>Agents</a>
         <a href="#new" class="nav-link" data-route>New</a>
       </nav>
       <div class="api">
@@ -37,10 +42,29 @@
         <h2>Scrape & Save</h2>
         <div class="row">
           <input id="url" class="input" type="url" placeholder="https://example.com" />
-          <button id="scrape" class="btn primary">Scrape</button>
+          <button id="scrape" class="btn primary">Scrape → Notes</button>
+          <button id="scrapeDocs" class="btn">Scrape → Docs</button>
         </div>
         <div id="scrape-status" class="status"></div>
         <pre id="preview" class="preview"></pre>
+      </section>
+
+      <section id="panel-search" class="panel">
+        <div class="panel-header">
+          <h2>Search</h2>
+          <div class="actions">
+            <select id="smode" class="input small">
+              <option value="semantic">Semantic</option>
+              <option value="keyword">Keyword</option>
+            </select>
+            <input id="sq" class="input" type="search" placeholder="Ask or type keywords..." />
+            <select id="sscope" class="input small"><option value="chunks">Chunks</option><option value="docs">Docs</option></select>
+            <input id="stopic" class="input small" placeholder="topic (primary)" />
+            <input id="sdate" class="input small" type="date" />
+            <button id="sgo" class="btn primary">Go</button>
+          </div>
+        </div>
+        <div id="sresults" class="grid"></div>
       </section>
 
       <section id="panel-new" class="panel">
@@ -48,9 +72,142 @@
         <textarea id="note-text" class="textarea" rows="10" placeholder="Write something..."></textarea>
         <div class="row">
           <input id="note-source" class="input" type="url" placeholder="Source URL (optional)" />
-          <button id="save" class="btn primary">Save</button>
+          <button id="save" class="btn primary">Save → Notes</button>
+          <button id="saveDoc" class="btn">Save → Docs</button>
         </div>
         <div id="save-status" class="status"></div>
+      </section>
+
+      <section id="panel-docs" class="panel">
+        <div class="panel-header">
+          <h2>Documents</h2>
+          <div class="actions">
+            <input id="dq" class="input" type="search" placeholder="Search title/text" />
+            <input id="dtopic" class="input small" placeholder="topic (primary)" />
+            <input id="ddate" class="input small" type="date" />
+            <button id="drefresh" class="btn">Refresh</button>
+          </div>
+        </div>
+        <div id="docs" class="grid"></div>
+        <div id="dpager" class="pager"></div>
+        <div id="docdetail" class="panel" style="margin-top:12px; display:none"></div>
+      </section>
+
+      <section id="panel-topics" class="panel">
+        <div class="panel-header">
+          <h2>Topics</h2>
+          <div class="actions">
+            <input id="tq" class="input small" placeholder="filter..." />
+            <button id="trefresh" class="btn">Refresh</button>
+          </div>
+        </div>
+        <div class="row">
+          <input id="tfrom" class="input" placeholder="from topic" />
+          <input id="tto" class="input" placeholder="to topic" />
+          <button id="trename" class="btn">Rename/Merge</button>
+          <div id="tstatus" class="status"></div>
+        </div>
+        <div class="grid" id="topics"></div>
+        <div id="tview" class="panel" style="margin-top:12px"></div>
+      </section>
+
+      <section id="panel-rollup" class="panel">
+        <h2>Daily Rollup</h2>
+        <div class="row">
+          <input id="rdate" class="input small" type="date" />
+          <label style="color: var(--muted); display:flex; align-items:center; gap:6px;"><input id="rrebuild" type="checkbox" /> rebuild</label>
+          <button id="rbuild" class="btn primary">Build</button>
+        </div>
+        <div id="rstatus" class="status"></div>
+        <div id="rview" class="panel" style="margin-top:12px"></div>
+        <div class="panel" style="margin-top:12px">
+          <h3>What I learned (time band)</h3>
+          <div class="row">
+            <input id="ldate" class="input small" type="date" />
+            <input id="lhfrom" class="input small" type="number" min="0" max="23" placeholder="from hour (0-23)" />
+            <input id="lhto" class="input small" type="number" min="0" max="23" placeholder="to hour (0-23)" />
+            <button id="lsummarize" class="btn">Summarize</button>
+          </div>
+          <div id="lstatus" class="status"></div>
+          <div id="lview" class="panel" style="margin-top:8px"></div>
+        </div>
+      </section>
+
+      <section id="panel-agents" class="panel">
+        <div class="panel-header">
+          <h2>Agents</h2>
+          <div class="actions">
+            <button id="astatus" class="btn">Refresh Status</button>
+          </div>
+        </div>
+        <div id="astatusview" class="panel" style="margin-bottom:12px"></div>
+        <div class="panel" style="margin-bottom:12px">
+          <h3>Agent Ingest (Text)</h3>
+          <textarea id="atext" class="textarea" rows="6" placeholder="Paste text to ingest via agent..."></textarea>
+          <div class="row">
+            <input id="achunk" class="input small" type="number" value="1000" />
+            <input id="aoverlap" class="input small" type="number" value="150" />
+            <button id="aingestText" class="btn primary">Ingest Text</button>
+            <div id="aingestTextStatus" class="status"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-bottom:12px">
+          <h3>Agent Ingest (URL)</h3>
+          <div class="row">
+            <input id="aurl" class="input" type="url" placeholder="https://..." />
+            <input id="auchunk" class="input small" type="number" value="1000" />
+            <input id="auoverlap" class="input small" type="number" value="150" />
+            <button id="aingestUrl" class="btn">Ingest URL</button>
+            <div id="aingestUrlStatus" class="status"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-bottom:12px">
+          <h3>Batch Ingest URLs</h3>
+          <textarea id="abulk" class="textarea" rows="4" placeholder="One URL per line..."></textarea>
+          <div class="row">
+            <button id="abulkrun" class="btn">Ingest All</button>
+            <div id="abulkstatus" class="status"></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Ask the Agent</h3>
+          <div class="row">
+            <input id="aaq" class="input" type="search" placeholder="Ask a question (retrieves semantically and summarizes)" />
+            <select id="aascope" class="input small"><option value="chunks">Chunks</option><option value="docs">Docs</option></select>
+            <input id="aatopk" class="input small" type="number" value="10" />
+            <button id="aarun" class="btn primary">Ask</button>
+          </div>
+          <div id="aastatus" class="status"></div>
+          <div id="aaview" class="panel" style="margin-top:8px"></div>
+        </div>
+        <div class="panel" style="margin-top:12px">
+          <h3>Categorize Text</h3>
+          <textarea id="actext" class="textarea" rows="4" placeholder="Paste text to categorize..."></textarea>
+          <div class="row">
+            <button id="acrun" class="btn">Categorize</button>
+            <div id="acstatus" class="status"></div>
+          </div>
+          <pre id="acview" class="preview"></pre>
+        </div>
+        <div class="panel" style="margin-top:12px">
+          <h3>Categorize Document</h3>
+          <div class="row">
+            <input id="acdocid" class="input" placeholder="Document ID (ObjectId)" />
+            <button id="acdocrun" class="btn">Categorize Doc</button>
+            <div id="acdocstatus" class="status"></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:12px">
+          <h3>Reprocess Document</h3>
+          <div class="row">
+            <input id="arpdocid" class="input" placeholder="Document ID (ObjectId)" />
+            <input id="arpchunk" class="input small" type="number" value="1000" />
+            <input id="arpoverlap" class="input small" type="number" value="150" />
+            <label style="color:var(--muted);display:flex;align-items:center;gap:6px"><input id="arpreplace" type="checkbox" checked/> replace chunks</label>
+            <button id="arprun" class="btn">Reprocess</button>
+            <div id="arpstatus" class="status"></div>
+          </div>
+        </div>
       </section>
     </main>
 

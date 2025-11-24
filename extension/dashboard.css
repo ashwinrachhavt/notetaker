@@ -13,6 +13,7 @@ body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0b1226 100%);color:v
 .container{max-width:1000px;margin:24px auto;padding:0 20px}
 .panel{display:none;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .panel.is-active{display:block}
+.panel h3{margin:8px 0 8px}
 .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .actions{display:flex;gap:10px}
 .row{display:flex;gap:10px;align-items:center;margin:12px 0}
@@ -31,4 +32,3 @@ body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0b1226 100%);color:v
 .snippet{white-space:pre-wrap;color:#cbd5e1;max-height:140px;overflow:auto}
 .pager{display:flex;gap:8px;justify-content:center;margin-top:10px}
 .time{color:var(--muted)}
-
