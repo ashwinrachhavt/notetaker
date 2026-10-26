@@ -5,10 +5,8 @@
   "description": "Capture selected text and send it to the NoteTaker backend.",
   "permissions": ["storage"],
   "host_permissions": [
-    "http://localhost:5000/*",
-    "http://127.0.0.1:5000/*",
-    "http://localhost:8010/*",
-    "http://127.0.0.1:8010/*"
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
   ],
   "content_scripts": [
     {
